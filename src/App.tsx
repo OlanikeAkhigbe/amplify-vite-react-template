@@ -6,6 +6,8 @@ import { generateClient } from "aws-amplify/data";
 const client = generateClient<Schema>();
 
 function App() {
+  const options = ["Alpha (Ground floor)", "Beta (First floor)", "Delta (Second floor)", "Lamdba (Third floor)"];
+  const [bookingOptions, setBookingOptions] = useState<string[]>(options);
   const [bookings, setBookings] = useState<Array<Schema["Booking"]["type"]>>([]);
   const { signOut } = useAuthenticator();
   useEffect(() => {
@@ -15,7 +17,7 @@ function App() {
   }, []);
 
   function createBooking() {
-    client.models.Booking.create({ content: window.prompt("Booking content") });
+    client.models.Booking.create({ content: window.prompt("Book a room") + "Alpha Room" });
   }
 
     
@@ -27,6 +29,7 @@ function App() {
     <main>
       <h1>Meeting Room Bookings</h1>
       <button onClick={createBooking}>Add Booking</button>
+      
       <ul>
         {bookings.map((booking) => (
           <li 
@@ -36,7 +39,14 @@ function App() {
         ))}
       </ul>
       <div>
-        🥳 App successfully hosted. Try creating a new booking.
+        <select>
+          {bookingOptions.map((bookingOption, key) => (
+            <option value={bookingOption} key={key}>{bookingOption}</option>
+          ))}
+        </select>
+      </div>
+      <div>
+        Try creating a new booking.
         <br />
       </div>
       <button onClick={signOut}>Sign out</button>
