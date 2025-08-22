@@ -36,8 +36,8 @@
     "model_introspection": {
       "version": 1,
       "models": {
-        "Todo": {
-          "name": "Todo",
+        "Booking": {
+          "name": "Booking",
           "fields": {
             "id": {
               "name": "id",
@@ -71,7 +71,7 @@
             }
           },
           "syncable": true,
-          "pluralName": "Todos",
+          "pluralName": "Bookings",
           "attributes": [
             {
               "type": "model",
