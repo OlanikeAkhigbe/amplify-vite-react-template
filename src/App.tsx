@@ -8,6 +8,7 @@ const client = generateClient<Schema>();
 function App() {
   const options = ["Alpha (Ground floor)", "Beta (First floor)", "Delta (Second floor)", "Lamdba (Third floor)"];
   const [bookingOptions, setBookingOptions] = useState<string[]>(options);
+  const [roomOption, setRoomOption] = useState<string>("")
   const [bookings, setBookings] = useState<Array<Schema["Booking"]["type"]>>([]);
   const { signOut } = useAuthenticator();
   useEffect(() => {
@@ -16,8 +17,13 @@ function App() {
     });
   }, []);
 
+  function handleChange(event) {
+    setRoomOption(event.target.value);
+  }
+
   function createBooking() {
-    client.models.Booking.create({ content: window.prompt("Book a room") + "Alpha Room" });
+    const windowValue = window.prompt("Enter Date to book for ");
+    client.models.Booking.create({ content: roomOption + " is now booked. Date: " + windowValue });
   }
 
     
@@ -39,16 +45,13 @@ function App() {
         ))}
       </ul>
       <div>
-        <select>
+        <select onChange={(event) => handleChange(event)}>
           {bookingOptions.map((bookingOption, key) => (
             <option value={bookingOption} key={key}>{bookingOption}</option>
           ))}
         </select>
       </div>
-      <div>
-        Try creating a new booking.
-        <br />
-      </div>
+      <br/>
       <button onClick={signOut}>Sign out</button>
     </main>
   );
