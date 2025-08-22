@@ -26,7 +26,7 @@ function App() {
   return (
     <main>
       <h1>Meeting Room Bookings</h1>
-      <button onClick={createBooking}>+ new</button>
+      <button onClick={createBooking}>Add Booking</button>
       <ul>
         {bookings.map((booking) => (
           <li 
