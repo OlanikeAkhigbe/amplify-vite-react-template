@@ -6,8 +6,6 @@ import { generateClient } from "aws-amplify/data";
 const client = generateClient<Schema>();
 
 function App() {
-  const options = ["Alpha (Ground floor)", "Beta (First floor)", "Delta (Second floor)", "Lamdba (Third floor)"];
-  const [bookingOptions, setBookingOptions] = useState<string[]>(options);
   const [roomOption, setRoomOption] = useState<string>("")
   const [bookings, setBookings] = useState<Array<Schema["Booking"]["type"]>>([]);
   const { signOut } = useAuthenticator();
@@ -16,10 +14,6 @@ function App() {
       next: (data) => setBookings([...data.items]),
     });
   }, []);
-
-  function handleChange(event) {
-    setRoomOption(event.target.value);
-  }
 
   function createBooking() {
     const windowValue = window.prompt("Enter Date to book for ");
