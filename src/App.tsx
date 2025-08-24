@@ -6,7 +6,6 @@ import { generateClient } from "aws-amplify/data";
 const client = generateClient<Schema>();
 
 function App() {
-  const [roomOption, setRoomOption] = useState<string>("")
   const [bookings, setBookings] = useState<Array<Schema["Booking"]["type"]>>([]);
   const { signOut } = useAuthenticator();
   useEffect(() => {
@@ -16,8 +15,7 @@ function App() {
   }, []);
 
   function createBooking() {
-    const windowValue = window.prompt("Enter Date to book for ");
-    client.models.Booking.create({ content: roomOption + " is now booked. Date: " + windowValue });
+    client.models.Booking.create({ content: window.prompt("Enter Date to book for ") });
   }
 
     
@@ -38,13 +36,7 @@ function App() {
           </li>
         ))}
       </ul>
-      <div>
-        <select onChange={(event) => handleChange(event)}>
-          {bookingOptions.map((bookingOption, key) => (
-            <option value={bookingOption} key={key}>{bookingOption}</option>
-          ))}
-        </select>
-      </div>
+      
       <br/>
       <button onClick={signOut}>Sign out</button>
     </main>
