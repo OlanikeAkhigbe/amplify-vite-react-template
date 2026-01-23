@@ -6,42 +6,52 @@ import { generateClient } from "aws-amplify/data";
 const client = generateClient<Schema>();
 
 function App() {
-  const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
+  const options = ["Alpha (Ground floor)", "Beta (First floor)", "Delta (Second floor)", "Lamdba (Third floor)"];
+  const [bookingOptions, setBookingOptions] = useState<string[]>(options);
+  const [roomOption, setRoomOption] = useState<string>("")
+  const [bookings, setBookings] = useState<Array<Schema["Booking"]["type"]>>([]);
   const { signOut } = useAuthenticator();
   useEffect(() => {
-    client.models.Todo.observeQuery().subscribe({
-      next: (data) => setTodos([...data.items]),
+    client.models.Booking.observeQuery().subscribe({
+      next: (data) => setBookings([...data.items]),
     });
   }, []);
 
-  function createTodo() {
-    client.models.Todo.create({ content: window.prompt("Todo content") });
+  function handleChange(event) {
+    setRoomOption(event.target.value);
+  }
+
+  function createBooking() {
+    const windowValue = window.prompt("Enter Date to book for ");
+    client.models.Booking.create({ content: roomOption + " is now booked. Date: " + windowValue });
   }
 
     
-  function deleteTodo(id: string) {
-    client.models.Todo.delete({ id })
+  function deleteBooking(id: string) {
+    client.models.Booking.delete({ id })
   }
 
   return (
     <main>
-      <h1>My todos</h1>
-      <button onClick={createTodo}>+ new</button>
+      <h1>Meeting Room Bookings</h1>
+      <button onClick={createBooking}>Add Booking</button>
+      
       <ul>
-        {todos.map((todo) => (
+        {bookings.map((booking) => (
           <li 
-          onClick={() => deleteTodo(todo.id)}
-          key={todo.id}>{todo.content}
+          onClick={() => deleteBooking(booking.id)}
+          key={booking.id}>{booking.content}
           </li>
         ))}
       </ul>
       <div>
-        🥳 App successfully hosted. Try creating a new todo.
-        <br />
-        <a href="https://docs.amplify.aws/react/start/quickstart/#make-frontend-updates">
-          Review next step of this tutorial.
-        </a>
+        <select onChange={(event) => handleChange(event)}>
+          {bookingOptions.map((bookingOption, key) => (
+            <option value={bookingOption} key={key}>{bookingOption}</option>
+          ))}
+        </select>
       </div>
+      <br/>
       <button onClick={signOut}>Sign out</button>
     </main>
   );
